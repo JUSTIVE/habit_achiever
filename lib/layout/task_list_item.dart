@@ -29,16 +29,18 @@ class _TaskListItemState extends State<TaskListItem> {
                   borderRadius: BorderRadius.all(Radius.circular(24))),
             ),
             SizedBox(
-              width: 8,
+              width: 16,
             ),
             Expanded(
                 child: Text(widget.taskItem.title,
                     style: Theme.of(context).textTheme.body1)),
-            Container(
-              color: Colors.grey.shade100,
-              width: 200,
-              height: 36,
-            ),
+            // Container(
+            //   color: Colors.grey.shade100,
+            //   width: 200,
+            //   height: 36,
+            // ),
+            Icon(Icons.check,color:Colors.grey.shade300),
+            SizedBox(width:32)
           ],
         ),
       ),

@@ -1,5 +1,6 @@
 import '../bloc/main_page_bloc.dart';
 import 'package:flutter/material.dart';
+import '../model/routine.dart';
 
 class MainPageBottomSheet extends StatefulWidget {
   MainPageBottomSheet({this.mainPageBloc});
@@ -15,11 +16,16 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
     Colors.orange.shade300,
     Colors.yellow.shade300,
     Colors.greenAccent.shade100,
+    Colors.indigoAccent.shade100,
+    Colors.pink.shade200
   ];
+  final List<String> days = ["월", "화", "수", "목", "금", "토", "일"];
+  Routine currentRoutine;
   TextEditingController tec = TextEditingController();
   @override
   void initState() {
     currentColorScheme = 0;
+    currentRoutine = Routine();
     super.initState();
   }
 
@@ -32,14 +38,14 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(24), topRight: Radius.circular(24))),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+          padding: EdgeInsets.only(left: 24, top: 32,bottom: 32),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              SizedBox(height: 32),
               Text("새 습관 추가", style: Theme.of(context).textTheme.title),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: ListView(
                   children: <Widget>[
                     SizedBox(
                       height: 32,
@@ -66,8 +72,9 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
                               });
                             },
                             child: Container(
-                              margin: EdgeInsets.all(8),
-                              height: 48,
+                              margin:
+                                  EdgeInsets.only(top: 8, bottom: 8, right: 16),
+                              height: 60,
                               width: 48,
                               decoration: BoxDecoration(
                                   color: colorSchemes[index],
@@ -82,7 +89,62 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
                           );
                         },
                       ),
-                    )
+                    ),
+                    SizedBox(
+                      height: 32,
+                    ),
+                    Text('루틴'),
+                    Container(
+                      height: 100,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 7,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: <Widget>[
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    currentRoutine.routines[index] =
+                                        !currentRoutine.routines[index];
+                                  });
+                                },
+                                child: Container(
+                                    margin: EdgeInsets.only(
+                                        top: 8, bottom: 8, right: 16),
+                                    height: 60,
+                                    width: 48,
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(24)),
+                                    child: Material(
+                                      elevation: currentRoutine.routines[index]
+                                          ? 2
+                                          : 0,
+                                      color: currentRoutine.routines[index]
+                                          ? Colors.white
+                                          : Colors.grey.shade200,
+                                      borderRadius: BorderRadius.circular(24),
+                                      child: Icon(
+                                        Icons.check,
+                                        color: currentRoutine.routines[index]
+                                            ? Colors.grey.shade300
+                                            : Colors.white,
+                                      ),
+                                    )),
+                              ),
+                              Center(child: Row(
+                                children: <Widget>[
+                                  Text(days[index]),
+                                  SizedBox(width: 16,)
+                                ],
+                              ))
+                            ],
+                          );
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -93,6 +155,7 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
                     widget.mainPageBloc.dispatch(AddTaskEvent(
                         title: tec.text,
                         color: colorSchemes[currentColorScheme]));
+                    FocusScope.of(context).requestFocus(new FocusNode());
                     Navigator.pop(context);
                   },
                 ),
