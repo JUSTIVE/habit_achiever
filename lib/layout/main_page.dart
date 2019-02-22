@@ -87,9 +87,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         mainPageBloc: _mainPageBloc,
                       )));
         },
-        child: Icon(
-          Icons.add,
-          color: Colors.brown,
+        child: Hero(
+          tag: "addbutton",
+          child: Icon(
+            Icons.add,
+            color: Colors.brown,
+          ),
         ),
       ),
     );

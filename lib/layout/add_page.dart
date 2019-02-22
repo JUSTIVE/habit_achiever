@@ -38,11 +38,15 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(24), topRight: Radius.circular(24))),
         child: Padding(
-          padding: EdgeInsets.only(left: 24, top: 32,bottom: 32),
+          padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SizedBox(height: 32),
+              Column(
+                children: <Widget>[
+                  SizedBox(height: 32),
+                ],
+              ),
               Text("새 습관 추가", style: Theme.of(context).textTheme.title),
               Expanded(
                 child: ListView(
@@ -59,10 +63,11 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
                     ),
                     Text("색상"),
                     Container(
-                      height: 80,
+                      height: 65,
                       child: ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
+                        physics: ScrollPhysics(),
                         itemCount: colorSchemes.length,
                         itemBuilder: (context, index) {
                           return InkWell(
@@ -74,8 +79,8 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
                             child: Container(
                               margin:
                                   EdgeInsets.only(top: 8, bottom: 8, right: 16),
-                              height: 60,
-                              width: 48,
+                              height: 48,
+                              width: 36,
                               decoration: BoxDecoration(
                                   color: colorSchemes[index],
                                   borderRadius: BorderRadius.circular(24)),
@@ -98,6 +103,7 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
                       height: 100,
                       child: ListView.builder(
                         shrinkWrap: true,
+                        physics: ScrollPhysics(),
                         scrollDirection: Axis.horizontal,
                         itemCount: 7,
                         itemBuilder: (context, index) {
@@ -113,8 +119,8 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
                                 child: Container(
                                     margin: EdgeInsets.only(
                                         top: 8, bottom: 8, right: 16),
-                                    height: 60,
-                                    width: 48,
+                                    height: 48,
+                                    width: 36,
                                     decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(24)),
@@ -134,10 +140,13 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
                                       ),
                                     )),
                               ),
-                              Center(child: Row(
+                              Center(
+                                  child: Row(
                                 children: <Widget>[
                                   Text(days[index]),
-                                  SizedBox(width: 16,)
+                                  SizedBox(
+                                    width: 16,
+                                  )
                                 ],
                               ))
                             ],
@@ -150,7 +159,7 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
               ),
               Center(
                 child: FlatButton(
-                  child: Icon(Icons.add),
+                  child: Hero(tag: "addbutton", child: Icon(Icons.add)),
                   onPressed: () {
                     widget.mainPageBloc.dispatch(AddTaskEvent(
                         title: tec.text,
