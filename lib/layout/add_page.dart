@@ -161,7 +161,8 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
                 ),
               ),
               Center(
-                child: FlatButton(
+                child: FloatingActionButton(
+                  backgroundColor: Colors.white,
                   child: Hero(tag: "addbutton", child: Icon(Icons.add)),
                   onPressed: () {
                     if (tec.text.trim() != "") {
