@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../model/task_item.dart';
 import 'task_info_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/main_page_bloc.dart';
 
 class TaskListItem extends StatefulWidget {
   TaskListItem({this.taskItem});
@@ -18,7 +20,8 @@ class _TaskListItemState extends State<TaskListItem> {
         showModalBottomSheet(
             context: context,
             builder: (context) => BottomSheet(
-                  builder: (context) => TaskListItemLongPressBottomSheet(),
+                  builder: (context) =>
+                      TaskListItemLongPressBottomSheet(id: widget.taskItem.id),
                   onClosing: () {},
                 ));
       },
@@ -58,6 +61,8 @@ class _TaskListItemState extends State<TaskListItem> {
 }
 
 class TaskListItemLongPressBottomSheet extends StatelessWidget {
+  TaskListItemLongPressBottomSheet({@required this.id});
+  final int id;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -70,8 +75,24 @@ class TaskListItemLongPressBottomSheet extends StatelessWidget {
         children: <Widget>[
           SizedBox(height: 32),
           InkWell(
-            onTap: () {},
-            child: Text('이 습관 삭제하기'),
+            onTap: () {
+              print("삭제");
+              BlocProvider.of<MainPageBloc>(context).dispatch(RemoveTaskEvent());
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Icon(
+                  Icons.remove_circle,
+                  color: Colors.redAccent.shade100,
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                Text('이 습관 삭제하기',
+                    style: TextStyle(color: Colors.redAccent.shade100)),
+              ],
+            ),
           ),
           SizedBox(height: 32),
         ],
