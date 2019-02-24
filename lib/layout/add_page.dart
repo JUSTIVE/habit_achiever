@@ -10,12 +10,14 @@ class MainPageBottomSheet extends StatefulWidget {
 }
 
 class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
+  GlobalKey _scaffoldKey = GlobalKey();
   int currentColorScheme = 0;
   final List<Color> colorSchemes = [
     Colors.red.shade300,
     Colors.orange.shade300,
     Colors.yellow.shade300,
     Colors.greenAccent.shade100,
+    Colors.lightBlueAccent.shade100,
     Colors.indigoAccent.shade100,
     Colors.pink.shade200
   ];
@@ -32,6 +34,7 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: Container(
         decoration: BoxDecoration(
             color: Colors.white,
@@ -78,9 +81,9 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
                             },
                             child: Container(
                               margin:
-                                  EdgeInsets.only(top: 8, bottom: 8, right: 16),
+                                  EdgeInsets.only(top: 8, bottom: 8, right: 12),
                               height: 48,
-                              width: 36,
+                              width: 48,
                               decoration: BoxDecoration(
                                   color: colorSchemes[index],
                                   borderRadius: BorderRadius.circular(24)),
@@ -118,9 +121,9 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
                                 },
                                 child: Container(
                                     margin: EdgeInsets.only(
-                                        top: 8, bottom: 8, right: 16),
+                                        top: 8, bottom: 8, right: 12),
                                     height: 48,
-                                    width: 36,
+                                    width: 48,
                                     decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(24)),
@@ -161,11 +164,17 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
                 child: FlatButton(
                   child: Hero(tag: "addbutton", child: Icon(Icons.add)),
                   onPressed: () {
-                    widget.mainPageBloc.dispatch(AddTaskEvent(
-                        title: tec.text,
-                        color: colorSchemes[currentColorScheme]));
-                    FocusScope.of(context).requestFocus(new FocusNode());
-                    Navigator.pop(context);
+                    if (tec.text.trim() != "") {
+                      widget.mainPageBloc.dispatch(AddTaskEvent(
+                          title: tec.text,
+                          color: colorSchemes[currentColorScheme]));
+                      FocusScope.of(context).requestFocus(new FocusNode());
+                      Navigator.pop(context);
+                    } else {
+                      (_scaffoldKey.currentState as ScaffoldState).showSnackBar(SnackBar(
+                        content: Text('이름을 입력해야 합니다'),
+                      ));
+                    }
                   },
                 ),
               )
