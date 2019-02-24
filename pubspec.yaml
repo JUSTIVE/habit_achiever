@@ -22,6 +22,7 @@ dependencies:
   bloc:
   flutter_bloc:
   shared_preferences:
+  flutter_local_notifications:
 
 dev_dependencies:
   flutter_test:
