@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../model/task_item.dart';
+import 'task_info_page.dart';
 
 class TaskListItem extends StatefulWidget {
   TaskListItem({this.taskItem});
@@ -13,6 +14,14 @@ class _TaskListItemState extends State<TaskListItem> {
   Widget build(BuildContext context) {
     return InkWell(
       splashColor: Colors.grey.shade100,
+      onLongPress: () {
+        showModalBottomSheet(
+            context: context,
+            builder: (context) => BottomSheet(
+                  builder: (context) => TaskListItemLongPressBottomSheet(),
+                  onClosing: () {},
+                ));
+      },
       onTap: () {},
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 8),
@@ -39,10 +48,33 @@ class _TaskListItemState extends State<TaskListItem> {
             //   width: 200,
             //   height: 36,
             // ),
-            Icon(Icons.check,color:Colors.grey.shade300),
-            SizedBox(width:32)
+            Icon(Icons.check, color: Colors.grey.shade300),
+            SizedBox(width: 32)
           ],
         ),
+      ),
+    );
+  }
+}
+
+class TaskListItemLongPressBottomSheet extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          SizedBox(height: 32),
+          InkWell(
+            onTap: () {},
+            child: Text('이 습관 삭제하기'),
+          ),
+          SizedBox(height: 32),
+        ],
       ),
     );
   }
