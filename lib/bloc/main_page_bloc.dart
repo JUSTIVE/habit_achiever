@@ -19,7 +19,9 @@ class MainPageBloc extends Bloc<AddTaskEvent, List<TaskItem>> {
   @override
   Stream<List<TaskItem>> mapEventToState(
       List<TaskItem> currentState, AddTaskEvent event) async* {
-    if (event is AddTaskEvent)
-      currentState.add(TaskItem(title: event.title, color: event.color, routine: event.routine));
+    if (event is AddTaskEvent){
+      currentState.add(TaskItem(id:TaskItem.lastId++,title: event.title, color: event.color, routine: event.routine));
+      print(this.state);
+    }
   }
 }
