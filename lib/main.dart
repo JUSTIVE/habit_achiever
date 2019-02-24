@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         canvasColor:  Colors.transparent,
-        primarySwatch: Colors.yellow,
+        primarySwatch: Colors.lightGreen,
         textTheme: TextTheme(
           title: TextStyle(
             fontSize: 24,
