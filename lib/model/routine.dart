@@ -1,12 +1,27 @@
 enum RoutineEnum{Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday}
 
 class Routine{
-  List<bool> routines; 
+  List<bool> _routines; 
   Routine(){
-    this.routines =List<bool>();
+    this._routines =List<bool>();
     
     for(int i=0;i<RoutineEnum.values.length;i++){
-      routines.add(false);
+      routines.add(true);
     }
   }
+
+  int setValue(int index){
+    _routines[index]=!_routines[index];
+    bool checker=false;
+    for(bool i in _routines)
+      checker|=i;
+    if(!checker){
+      for(int i=0;i<RoutineEnum.values.length;i++)
+        _routines[i]=true;
+      return 1;
+    }
+    else return 0;
+  }
+
+  List<bool> get routines=>_routines;
 }

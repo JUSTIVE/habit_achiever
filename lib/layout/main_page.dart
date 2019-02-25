@@ -1,38 +1,33 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:habit_achiever/model/task_item.dart';
 import 'package:habit_achiever/layout/task_list_item.dart';
 import 'add_page.dart';
 import 'component/column_builder.dart';
+import '../model/task_item.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/main_page_bloc.dart';
 import '../bloc/main_page_progress_bloc.dart';
+import '../bloc/util/bloc_provider.dart';
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
+class MainPage extends StatefulWidget {
+  MainPage({Key key}) : super(key: key);
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MainPageState createState() => _MainPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  MainPageBloc _mainPageBloc;
+class _MainPageState extends State<MainPage> {
   MainPageProgressBloc _mainPageProgressBloc;
   ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
-    _mainPageBloc = MainPageBloc();
     _mainPageProgressBloc = MainPageProgressBloc();
     _scrollController = ScrollController();
   }
 
   @override
   void dispose() {
-    _mainPageBloc.dispose();
     _mainPageProgressBloc.dispose();
     _scrollController.dispose();
     super.dispose();
@@ -40,6 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final _mainPageBloc = NBlocProvider.of(context).mainPageBloc;
     return Scaffold(
       backgroundColor: Color(0xfff0f0f0),
       body: Stack(children: [
@@ -60,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 24, vertical: 32),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: <Widget>[
                                 SizedBox(height: 100),
                                 Padding(
@@ -73,12 +69,27 @@ class _MyHomePageState extends State<MyHomePage> {
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(vertical: 16),
                                     child: ColumnBuilder(
-                                      itemCount:
-                                          _mainPageBloc.currentState.length,
+                                      itemCount: (tasks as List<TaskItem>)
+                                          .where(
+                                              (item) => !item.tasks.last.isDone)
+                                          .where((item) =>
+                                              item.routine.routines[
+                                                  DateTime.now().weekday - 1])
+                                          .length,
                                       itemBuilder:
                                           (BuildContext context, int index) {
+                                        List<TaskItem> listUndone =
+                                            (tasks as List<TaskItem>).where(
+                                                (item) =>
+                                                    !item.tasks.last.isDone).toList();
+                                        List<TaskItem> sortedlist = []
+                                          ..addAll(listUndone.where((i) =>
+                                              i.routine.routines[
+                                                  DateTime.now().weekday - 1]))
+                                          ;
+
                                         return TaskListItem(
-                                            taskItem: tasks[index]);
+                                            taskItem: sortedlist[index]);
                                       },
                                     ),
                                   ),
@@ -106,28 +117,28 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: EdgeInsets.all(16),
               child: Column(mainAxisSize: MainAxisSize.min, children: [
                 Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          "진행 상황",
-                          style: Theme.of(context).textTheme.title,
-                          textAlign: TextAlign.start,
-                        ),
-                        Text(
-                          (_mainPageBloc.currentState.length == 0
-                    ? 0
-                    : (_mainPageProgressBloc.currentState *
-                        100 /
-                        _mainPageBloc.currentState.length))
-                .toInt()
-                .toString() +
-                              "%",
-                        )
-                      ],
-                    ),
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        "진행 상황",
+                        style: Theme.of(context).textTheme.title,
+                        textAlign: TextAlign.start,
+                      ),
+                      Text(
+                        (_mainPageBloc.currentState.length == 0
+                                    ? 0
+                                    : (_mainPageProgressBloc.currentState *
+                                        100 /
+                                        _mainPageBloc.currentState.length))
+                                .toInt()
+                                .toString() +
+                            "%",
+                      )
+                    ],
                   ),
+                ),
                 LinearProgressIndicator(
                   value: _mainPageBloc.currentState.length == 0
                       ? 0

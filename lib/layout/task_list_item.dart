@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import '../model/task_item.dart';
-import 'task_info_page.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'main_page.dart';
+import '../bloc/util/bloc_provider.dart';
 import '../bloc/main_page_bloc.dart';
+import 'component/row_builder.dart';
 
 class TaskListItem extends StatefulWidget {
   TaskListItem({this.taskItem});
@@ -31,7 +32,7 @@ class _TaskListItemState extends State<TaskListItem> {
         child: Row(
           children: <Widget>[
             SizedBox(
-              width: 24,
+              width: 16,
             ),
             Container(
               width: 36,
@@ -44,15 +45,33 @@ class _TaskListItemState extends State<TaskListItem> {
               width: 16,
             ),
             Expanded(
-                child: Text(widget.taskItem.title,
-                    style: Theme.of(context).textTheme.body1)),
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Text(widget.taskItem.title,
+                    style: Theme.of(context).textTheme.body1),
+                SizedBox(
+                  height: 4,
+                ),
+                RowBuilder(
+                  itemCount: 7,
+                  itemBuilder: (BuildContext context, int index) {
+                    return RoutineToken(
+                        color: widget.taskItem.routine.routines[index]
+                            ? widget.taskItem.color
+                            : Colors.grey.shade200);
+                  },
+                )
+              ],
+            )),
             // Container(
             //   color: Colors.grey.shade100,
             //   width: 200,
             //   height: 36,
             // ),
             Icon(Icons.check, color: Colors.grey.shade300),
-            SizedBox(width: 32)
+            SizedBox(width: 16)
           ],
         ),
       ),
@@ -60,9 +79,15 @@ class _TaskListItemState extends State<TaskListItem> {
   }
 }
 
-class TaskListItemLongPressBottomSheet extends StatelessWidget {
+class TaskListItemLongPressBottomSheet extends StatefulWidget {
   TaskListItemLongPressBottomSheet({@required this.id});
   final int id;
+
+  @override
+  _TaskListItemLongPressBottomSheetState createState() => _TaskListItemLongPressBottomSheetState();
+}
+
+class _TaskListItemLongPressBottomSheetState extends State<TaskListItemLongPressBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -77,7 +102,11 @@ class TaskListItemLongPressBottomSheet extends StatelessWidget {
           InkWell(
             onTap: () {
               print("삭제");
-              BlocProvider.of<MainPageBloc>(context).dispatch(RemoveTaskEvent());
+              setState((){
+                NBlocProvider.of(context)
+                  .mainPageBloc
+                  .dispatch(RemoveTaskEvent(id: widget.id));
+              });
             },
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -96,6 +125,24 @@ class TaskListItemLongPressBottomSheet extends StatelessWidget {
           ),
           SizedBox(height: 32),
         ],
+      ),
+    );
+  }
+}
+
+class RoutineToken extends StatelessWidget {
+  RoutineToken({this.color});
+
+  final Color color;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(right: 2),
+      child: Container(
+        width: 4,
+        height: 4,
+        decoration:
+            BoxDecoration(color: color, borderRadius: BorderRadius.circular(2)),
       ),
     );
   }

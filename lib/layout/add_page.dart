@@ -35,154 +35,176 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      body: Container(
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(24), topRight: Radius.circular(24))),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  SizedBox(height: 32),
-                ],
-              ),
-              Text("새 습관 추가", style: Theme.of(context).textTheme.title),
-              Expanded(
-                child: ListView(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 32,
-                    ),
-                    Text("이름"),
-                    TextField(
-                      controller: tec,
-                    ),
-                    SizedBox(
-                      height: 32,
-                    ),
-                    Text("색상"),
-                    Container(
-                      height: 65,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        physics: ScrollPhysics(),
-                        itemCount: colorSchemes.length,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () {
-                              setState(() {
-                                currentColorScheme = index;
-                              });
-                            },
-                            child: Container(
-                              margin:
-                                  EdgeInsets.only(top: 8, bottom: 8, right: 12),
-                              height: 48,
-                              width: 48,
-                              decoration: BoxDecoration(
-                                  color: colorSchemes[index],
-                                  borderRadius: BorderRadius.circular(24)),
-                              child: (index == currentColorScheme)
-                                  ? Icon(
-                                      Icons.check,
-                                      color: Colors.white,
-                                    )
-                                  : Container(),
-                            ),
-                          );
-                        },
+      body: Stack(children: [
+        Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(24), topRight: Radius.circular(24))),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(height: 32),
+                Text("새 습관 추가", style: Theme.of(context).textTheme.title),
+                Expanded(
+                  child: ListView(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 32,
                       ),
-                    ),
-                    SizedBox(
-                      height: 32,
-                    ),
-                    Text('루틴'),
-                    Container(
-                      height: 100,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: ScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        itemCount: 7,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: <Widget>[
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    currentRoutine.routines[index] =
-                                        !currentRoutine.routines[index];
-                                  });
-                                },
-                                child: Container(
-                                    margin: EdgeInsets.only(
-                                        top: 8, bottom: 8, right: 12),
-                                    height: 48,
-                                    width: 48,
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(24)),
-                                    child: Material(
-                                      elevation: currentRoutine.routines[index]
-                                          ? 2
-                                          : 0,
-                                      color: currentRoutine.routines[index]
-                                          ? Colors.white
-                                          : Colors.grey.shade200,
-                                      borderRadius: BorderRadius.circular(24),
-                                      child: Icon(
+                      Text("이름"),
+                      TextField(
+                        controller: tec,
+                      ),
+                      SizedBox(
+                        height: 32,
+                      ),
+                      Text("색상"),
+                      Container(
+                        height: 56,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          physics: ScrollPhysics(),
+                          itemCount: colorSchemes.length,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  currentColorScheme = index;
+                                });
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                    top: 8, bottom: 8, right: 12),
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                    color: colorSchemes[index],
+                                    borderRadius: BorderRadius.circular(24)),
+                                child: (index == currentColorScheme)
+                                    ? Icon(
                                         Icons.check,
-                                        color: currentRoutine.routines[index]
-                                            ? Colors.grey.shade300
-                                            : Colors.white,
-                                      ),
-                                    )),
+                                        color: Colors.white,
+                                      )
+                                    : Container(),
                               ),
-                              Center(
-                                  child: Row(
-                                children: <Widget>[
-                                  Text(days[index]),
-                                  SizedBox(
-                                    width: 16,
-                                  )
-                                ],
-                              ))
-                            ],
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  ],
+                      SizedBox(
+                        height: 32,
+                      ),
+                      Text('루틴'),
+                      Container(
+                        height: 80,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: ScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 7,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              children: <Widget>[
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      if (currentRoutine.setValue(index) == 1) {
+                                        (_scaffoldKey.currentState
+                                                as ScaffoldState)
+                                            .showSnackBar(SnackBar(
+                                          content: Text('하루 이상은 반복해야 합니다'),
+                                        ));
+                                      }
+                                    });
+                                  },
+                                  child: Container(
+                                      margin: EdgeInsets.only(
+                                          top: 8, bottom: 8, right: 12),
+                                      height: 40,
+                                      width: 40,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(24)),
+                                      child: Material(
+                                        elevation:
+                                            currentRoutine.routines[index]
+                                                ? 2
+                                                : 0,
+                                        color: currentRoutine.routines[index]
+                                            ? Colors.white
+                                            : Colors.grey.shade200,
+                                        borderRadius: BorderRadius.circular(24),
+                                        child: Icon(
+                                          Icons.check,
+                                          color: currentRoutine.routines[index]
+                                              ? Colors.grey.shade300
+                                              : Colors.white,
+                                        ),
+                                      )),
+                                ),
+                                Center(
+                                    child: Row(
+                                  children: <Widget>[
+                                    Text(days[index]),
+                                    SizedBox(
+                                      width: 16,
+                                    )
+                                  ],
+                                ))
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Center(
-                child: FloatingActionButton(
-                  backgroundColor: Colors.white,
-                  child: Hero(tag: "addbutton", child: Icon(Icons.add)),
-                  onPressed: () {
-                    if (tec.text.trim() != "") {
-                      widget.mainPageBloc.dispatch(AddTaskEvent(
-                          title: tec.text,
-                          color: colorSchemes[currentColorScheme]));
-                      FocusScope.of(context).requestFocus(new FocusNode());
-                      Navigator.pop(context);
-                    } else {
-                      (_scaffoldKey.currentState as ScaffoldState).showSnackBar(SnackBar(
-                        content: Text('이름을 입력해야 합니다'),
-                      ));
-                    }
-                  },
-                ),
-              )
-            ],
+              ],
+            ),
           ),
         ),
-      ),
+        Column(
+          verticalDirection: VerticalDirection.up,
+          children: <Widget>[
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 15,
+                  ),
+                  FloatingActionButton(
+                    backgroundColor: Colors.white,
+                    child: Hero(tag: "addbutton", child: Icon(Icons.add)),
+                    onPressed: () {
+                      if (tec.text.trim() != "") {
+                        widget.mainPageBloc.dispatch(AddTaskEvent(
+                            title: tec.text,
+                            color: colorSchemes[currentColorScheme],
+                            routine: currentRoutine));
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        Navigator.pop(context);
+                      } else {
+                        (_scaffoldKey.currentState as ScaffoldState)
+                            .showSnackBar(SnackBar(
+                          content: Text('이름을 입력해야 합니다'),
+                        ));
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height: 18,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        )
+      ]),
     );
   }
 }
