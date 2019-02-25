@@ -23,6 +23,7 @@ dependencies:
   flutter_bloc:
   shared_preferences:
   flutter_local_notifications:
+  flutter_reorderable_list:
 
 dev_dependencies:
   flutter_test:
