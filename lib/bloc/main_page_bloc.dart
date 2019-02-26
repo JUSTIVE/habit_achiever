@@ -25,6 +25,7 @@ class MainPageBloc extends Bloc<TaskEvent, List<TaskItem>> {
   @override
   Stream<List<TaskItem>> mapEventToState(
       List<TaskItem> currentState, TaskEvent event) async* {
+    print(currentState[currentState.length - 1].toString() + "생성");
     if (event is AddTaskEvent) {
       currentState.add(TaskItem(
           id: TaskItem.lastId++,
@@ -35,7 +36,7 @@ class MainPageBloc extends Bloc<TaskEvent, List<TaskItem>> {
       print(DateTime.now().weekday.toString());
       print(this.state);
     } else if (event is RemoveTaskEvent) {
-      print(event.id.toString() + "삭제 중");
+      print(currentState.where((i) => i.id == event.id).toList()[0].toString() + "삭제 중");
       currentState.removeWhere((i) => i.id == event.id);
     }
   }
