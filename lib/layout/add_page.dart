@@ -85,7 +85,7 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
                                     color: colorSchemes[index],
                                     borderRadius: BorderRadius.circular(24)),
                                 child: (index == currentColorScheme)
-                                    ? Icon(
+                                    ? const Icon(
                                         Icons.check,
                                         color: Colors.white,
                                       )
@@ -95,10 +95,10 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
                           },
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 32,
                       ),
-                      Text('루틴'),
+                      const Text('루틴'),
                       Container(
                         height: 80,
                         child: ListView.builder(
@@ -150,7 +150,7 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
                                     child: Row(
                                   children: <Widget>[
                                     Text(days[index]),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 16,
                                     )
                                   ],
@@ -174,13 +174,13 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
               alignment: Alignment.bottomCenter,
               child: Column(
                 children: <Widget>[
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   FloatingActionButton(
                     backgroundColor: Colors.white,
                     child: Hero(tag: "addbutton", child: Icon(Icons.add)),
-                    onPressed: () {
+                    onPressed: () async {
                       if (tec.text.trim() != "") {
                         widget.mainPageBloc.dispatch(AddTaskEvent(
                             title: tec.text,
@@ -196,7 +196,7 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
                       }
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 18,
                   ),
                 ],

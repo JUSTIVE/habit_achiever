@@ -7,7 +7,7 @@ import '../model/task_item.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/main_page_progress_bloc.dart';
-import '../bloc/util/bloc_provider.dart';
+import '../bloc/main_page_bloc.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({Key key}) : super(key: key);
@@ -17,8 +17,9 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   MainPageProgressBloc _mainPageProgressBloc;
+  final MainPageBloc _mainPageBloc = MainPageBloc();
   ScrollController _scrollController;
-
+  static int k = 0;
   @override
   void initState() {
     super.initState();
@@ -35,78 +36,83 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    final _mainPageBloc = NBlocProvider.of(context).mainPageBloc;
     return Scaffold(
       backgroundColor: Color(0xfff0f0f0),
       body: Stack(children: [
-        BlocBuilder(
-            bloc: _mainPageBloc,
-            builder: (context, tasks) {
-              return ListView(
-                controller: _scrollController,
-                shrinkWrap: true,
-                children: <Widget>[
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
+        ListView(
+          controller: _scrollController,
+          shrinkWrap: true,
+          children: <Widget>[
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-                      BlocBuilder(
-                        bloc: _mainPageBloc,
-                        builder: (context, tasks) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 24, vertical: 32),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: <Widget>[
-                                SizedBox(height: 100),
-                                Padding(
-                                    padding: EdgeInsets.all(12),
-                                    child: Text('오늘 해야 할 습관')),
-                                Material(
-                                  color: Colors.white,
-                                  elevation: 1,
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 16),
-                                    child: ColumnBuilder(
-                                      itemCount: (tasks as List<TaskItem>)
-                                          .where(
-                                              (item) => !item.tasks.last.isDone)
-                                          .where((item) =>
-                                              item.routine.routines[
-                                                  DateTime.now().weekday - 1])
-                                          .length,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        List<TaskItem> listUndone =
-                                            (tasks as List<TaskItem>).where(
-                                                (item) =>
-                                                    !item.tasks.last.isDone).toList();
-                                        List<TaskItem> sortedlist = []
-                                          ..addAll(listUndone.where((i) =>
-                                              i.routine.routines[
-                                                  DateTime.now().weekday - 1]))
-                                          ;
-
-                                        return TaskListItem(
-                                            taskItem: sortedlist[index]);
-                                      },
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                    padding: EdgeInsets.all(12),
-                                    child: Text('오늘 한 습관')),
-                              ],
-                            ),
-                          );
-                        },
+                      SizedBox(height: 100),
+                      Padding(
+                          padding: EdgeInsets.all(12),
+                          child: Text('오늘 해야 할 습관')),
+                      Material(
+                        color: Colors.white,
+                        elevation: 1,
+                        borderRadius: BorderRadius.circular(8),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          child: StreamBuilder(
+                              stream: _mainPageBloc.state,
+                              builder: (context,
+                                  AsyncSnapshot<TaskListState> blocState) {
+                                if (blocState.data is TaskListState)
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount:
+                                            blocState.data.visibleItems.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return BlocProvider(
+                                            bloc: _mainPageBloc,
+                                            child: TaskListItem(
+                                                taskItem: blocState
+                                                    .data.visibleItems[index]),
+                                          );
+                                        },
+                                      ),
+                                      Container(
+                                        child: Text(blocState
+                                                .data.taskItems.length
+                                                .toString() +
+                                            ", vis:" +
+                                            blocState.data.visibleItems.length
+                                                .toString()),
+                                      )
+                                    ],
+                                  );
+                                else {
+                                  return Container(
+                                    child: Text(blocState.data == null
+                                        ? '0'
+                                        : blocState.data.taskItems.length
+                                            .toString()),
+                                  );
+                                }
+                              }),
+                        ),
                       ),
+                      Padding(
+                          padding: EdgeInsets.all(12), child: Text('오늘 한 습관')),
                     ],
                   ),
-                ],
-              );
-            }),
+                ),
+              ],
+            ),
+          ],
+        ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 48),
           child: Material(
@@ -127,11 +133,12 @@ class _MainPageState extends State<MainPage> {
                         textAlign: TextAlign.start,
                       ),
                       Text(
-                        (_mainPageBloc.currentState.length == 0
+                        (_mainPageBloc.currentState.taskItems.length == 0
                                     ? 0
                                     : (_mainPageProgressBloc.currentState *
                                         100 /
-                                        _mainPageBloc.currentState.length))
+                                        _mainPageBloc
+                                            .currentState.taskItems.length))
                                 .toInt()
                                 .toString() +
                             "%",
@@ -140,11 +147,11 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ),
                 LinearProgressIndicator(
-                  value: _mainPageBloc.currentState.length == 0
+                  value: _mainPageBloc.currentState.taskItems.length == 0
                       ? 0
                       : (_mainPageProgressBloc.currentState *
                           100 /
-                          _mainPageBloc.currentState.length),
+                          _mainPageBloc.currentState.taskItems.length),
                 ),
               ]),
             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import '../model/task_item.dart';
 import '../model/routine.dart';
+import 'package:equatable/equatable.dart';
 
 abstract class TaskEvent {}
 
@@ -18,26 +19,49 @@ class RemoveTaskEvent extends TaskEvent {
   int id;
 }
 
-class MainPageBloc extends Bloc<TaskEvent, List<TaskItem>> {
+class TaskListState extends Equatable {
+  final List<TaskItem> taskItems;
+  final List<TaskItem> visibleItems;
+  TaskListState({@required this.taskItems, this.visibleItems})
+      : super([taskItems,visibleItems]);
+}
+
+class TaskListUpdated extends TaskListState {
+  final List<TaskItem> visibleItems;
+  TaskListUpdated(List<TaskItem> taskItems, this.visibleItems)
+      : super(taskItems: taskItems);
+}
+
+class MainPageBloc extends Bloc<TaskEvent, TaskListState> {
   @override
-  List<TaskItem> get initialState => List<TaskItem>();
+  TaskListState get initialState => TaskListState(
+      taskItems: List<TaskItem>(), visibleItems: List<TaskItem>());
 
   @override
-  Stream<List<TaskItem>> mapEventToState(
-      List<TaskItem> currentState, TaskEvent event) async* {
-    print(currentState[currentState.length - 1].toString() + "생성");
+  Stream<TaskListState> mapEventToState(
+      TaskListState currentState, TaskEvent event) async* {
     if (event is AddTaskEvent) {
-      currentState.add(TaskItem(
+      List<TaskItem> temp = currentState.taskItems;
+      temp.add(TaskItem(
           id: TaskItem.lastId++,
           title: event.title,
           color: event.color,
           routine: event.routine));
-      print(currentState[currentState.length - 1].toString() + "생성");
-      print(DateTime.now().weekday.toString());
-      print(this.state);
+      yield TaskListState(
+          taskItems: temp,
+          visibleItems: temp//.where((item) =>
+              // !item.tasks.last.isDone &&
+              //item.routine.routines[DateTime.now().weekday - 1])
+          );
     } else if (event is RemoveTaskEvent) {
-      print(currentState.where((i) => i.id == event.id).toList()[0].toString() + "삭제 중");
-      currentState.removeWhere((i) => i.id == event.id);
+      List<TaskItem> temp = currentState.taskItems;
+      temp.removeWhere((i) => i.id == event.id);
+      yield TaskListState(
+          taskItems: temp,
+          visibleItems: temp//.where((item) =>
+              // !item.tasks.last.isDone &&
+              //item.routine.routines[DateTime.now().weekday - 1])
+          );
     }
   }
 }

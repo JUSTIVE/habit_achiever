@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../model/task_item.dart';
-import 'main_page.dart';
-import '../bloc/util/bloc_provider.dart';
+
 import '../bloc/main_page_bloc.dart';
 import 'component/row_builder.dart';
 
@@ -15,16 +15,19 @@ class TaskListItem extends StatefulWidget {
 class _TaskListItemState extends State<TaskListItem> {
   @override
   Widget build(BuildContext context) {
+    MainPageBloc _mainPageBloc = BlocProvider.of<MainPageBloc>(context);
     return InkWell(
       splashColor: Colors.grey.shade100,
       onLongPress: () {
         showModalBottomSheet(
             context: context,
-            builder: (context) => BottomSheet(
+            builder: (context) => BlocProvider(
+                bloc: _mainPageBloc,
+                child: BottomSheet(
                   builder: (context) =>
                       TaskListItemLongPressBottomSheet(id: widget.taskItem.id),
                   onClosing: () {},
-                ));
+                )));
       },
       onTap: () {},
       child: Padding(
@@ -84,10 +87,12 @@ class TaskListItemLongPressBottomSheet extends StatefulWidget {
   final int id;
 
   @override
-  _TaskListItemLongPressBottomSheetState createState() => _TaskListItemLongPressBottomSheetState();
+  _TaskListItemLongPressBottomSheetState createState() =>
+      _TaskListItemLongPressBottomSheetState();
 }
 
-class _TaskListItemLongPressBottomSheetState extends State<TaskListItemLongPressBottomSheet> {
+class _TaskListItemLongPressBottomSheetState
+    extends State<TaskListItemLongPressBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -102,11 +107,11 @@ class _TaskListItemLongPressBottomSheetState extends State<TaskListItemLongPress
           InkWell(
             onTap: () {
               print("삭제");
-              setState((){
-                NBlocProvider.of(context)
-                  .mainPageBloc
-                  .dispatch(RemoveTaskEvent(id: widget.id));
+              setState(() {
+                BlocProvider.of<MainPageBloc>(context)
+                    .dispatch(RemoveTaskEvent(id: widget.id));
               });
+              Navigator.pop(context);
             },
             child: Row(
               mainAxisSize: MainAxisSize.min,

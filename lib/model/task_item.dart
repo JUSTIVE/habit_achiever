@@ -19,6 +19,15 @@ class TaskItem {
     tasks=json['tasks'],
     routine= json['routine'];
   
+  Map<String, dynamic> toJson()=>
+  {
+    'id':id,
+    'title':title,
+    'color':color,
+    'routine':routine,
+    'tasks':tasks
+  };
+  
   static int lastId = 0;
   int id;
   Color color;
@@ -27,6 +36,7 @@ class TaskItem {
   Routine routine;
 
   String toString() {
+    print("in");
     return jsonEncode(this);
   }
   
