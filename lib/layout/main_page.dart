@@ -27,6 +27,12 @@ class _MainPageState extends State<MainPage> {
     _scrollController = ScrollController();
   }
 
+  void redraw(){
+    setState(() {
+      
+    });
+  }
+
   @override
   void dispose() {
     _mainPageProgressBloc.dispose();
@@ -79,7 +85,7 @@ class _MainPageState extends State<MainPage> {
                                             bloc: _mainPageBloc,
                                             child: TaskListItem(
                                                 taskItem: blocState
-                                                    .data.visibleItems[index]),
+                                                    .data.visibleItems[index],redrawer:redraw),
                                           );
                                         },
                                       ),

@@ -6,7 +6,8 @@ import '../bloc/main_page_bloc.dart';
 import 'component/row_builder.dart';
 
 class TaskListItem extends StatefulWidget {
-  TaskListItem({this.taskItem});
+  TaskListItem({this.taskItem,this.redrawer});
+  final Function redrawer;
   final TaskItem taskItem;
   @override
   _TaskListItemState createState() => _TaskListItemState();
@@ -25,7 +26,7 @@ class _TaskListItemState extends State<TaskListItem> {
                 bloc: _mainPageBloc,
                 child: BottomSheet(
                   builder: (context) =>
-                      TaskListItemLongPressBottomSheet(id: widget.taskItem.id),
+                      TaskListItemLongPressBottomSheet(id: widget.taskItem.id,redrawer:widget.redrawer),
                   onClosing: () {},
                 )));
       },
@@ -83,8 +84,9 @@ class _TaskListItemState extends State<TaskListItem> {
 }
 
 class TaskListItemLongPressBottomSheet extends StatefulWidget {
-  TaskListItemLongPressBottomSheet({@required this.id});
+  TaskListItemLongPressBottomSheet({@required this.id,this.redrawer});
   final int id;
+  final Function redrawer;
 
   @override
   _TaskListItemLongPressBottomSheetState createState() =>
@@ -110,6 +112,7 @@ class _TaskListItemLongPressBottomSheetState
               setState(() {
                 BlocProvider.of<MainPageBloc>(context)
                     .dispatch(RemoveTaskEvent(id: widget.id));
+                widget.redrawer();
               });
               Navigator.pop(context);
             },

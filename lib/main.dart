@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'layout/main_page.dart';
-import 'bloc/app_bloc.dart';
 
-void main(){
-  final appbloc = AppBloc();
-  runApp(MyApp(appbloc));
+void main() {
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final AppBloc appBloc;
-  
-  MyApp(this.appBloc);
+  MyApp();
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +30,5 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 
 // 노트북에서 커밋
