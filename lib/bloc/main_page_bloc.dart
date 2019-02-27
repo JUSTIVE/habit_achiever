@@ -49,18 +49,18 @@ class MainPageBloc extends Bloc<TaskEvent, TaskListState> {
           routine: event.routine));
       yield TaskListState(
           taskItems: temp,
-          visibleItems: temp//.where((item) =>
-              // !item.tasks.last.isDone &&
-              //item.routine.routines[DateTime.now().weekday - 1])
+          visibleItems: temp.where((item) =>
+              (!item.tasks.last.isDone) &&
+              item.routine.routines[DateTime.now().weekday - 1]).toList()
           );
     } else if (event is RemoveTaskEvent) {
       List<TaskItem> temp = currentState.taskItems;
       temp.removeWhere((i) => i.id == event.id);
       yield TaskListState(
           taskItems: temp,
-          visibleItems: temp//.where((item) =>
-              // !item.tasks.last.isDone &&
-              //item.routine.routines[DateTime.now().weekday - 1])
+          visibleItems: temp.where((item) =>
+              (!item.tasks.last.isDone) &&
+              item.routine.routines[DateTime.now().weekday - 1]).toList()
           );
     }
   }

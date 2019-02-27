@@ -27,10 +27,8 @@ class _MainPageState extends State<MainPage> {
     _scrollController = ScrollController();
   }
 
-  void redraw(){
-    setState(() {
-      
-    });
+  void redraw() {
+    setState(() {});
   }
 
   @override
@@ -85,7 +83,8 @@ class _MainPageState extends State<MainPage> {
                                             bloc: _mainPageBloc,
                                             child: TaskListItem(
                                                 taskItem: blocState
-                                                    .data.visibleItems[index],redrawer:redraw),
+                                                    .data.visibleItems[index],
+                                                redrawer: redraw),
                                           );
                                         },
                                       ),
@@ -112,6 +111,57 @@ class _MainPageState extends State<MainPage> {
                       ),
                       Padding(
                           padding: EdgeInsets.all(12), child: Text('오늘 한 습관')),
+                      //!TODO: implement done works
+                      Material(
+                        color: Colors.white,
+                        elevation: 1,
+                        borderRadius: BorderRadius.circular(8),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          child: StreamBuilder(
+                              stream: _mainPageBloc.state,
+                              builder: (context,
+                                  AsyncSnapshot<TaskListState> blocState) {
+                                if (blocState.data is TaskListState)
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount:
+                                            blocState.data.visibleItems.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return BlocProvider(
+                                            bloc: _mainPageBloc,
+                                            child: TaskListItem(
+                                                taskItem: blocState
+                                                    .data.visibleItems[index],
+                                                redrawer: redraw),
+                                          );
+                                        },
+                                      ),
+                                      Container(
+                                        child: Text(blocState
+                                                .data.taskItems.length
+                                                .toString() +
+                                            ", don:" +
+                                            blocState.data.visibleItems.length
+                                                .toString()),
+                                      )
+                                    ],
+                                  );
+                                else {
+                                  return Container(
+                                    child: Text(blocState.data == null
+                                        ? '0'
+                                        : blocState.data.taskItems.length
+                                            .toString()),
+                                  );
+                                }
+                              }),
+                        ),
+                      ),
                     ],
                   ),
                 ),
