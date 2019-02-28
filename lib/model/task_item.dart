@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'routine.dart';
 import 'dart:convert';
 
+import 'Date.dart';
+
 class TaskItem {
   TaskItem(
       {@required this.id,
@@ -10,7 +12,7 @@ class TaskItem {
       @required this.color,
       @required this.routine})
       : tasks = List<Task>()
-      ..add(Task(date: DateTime.now()));
+      ..add(Task(date: Date(DateTime.now())));
 
   TaskItem.fromJson(Map<String,dynamic> json)
     :id=json['id'],

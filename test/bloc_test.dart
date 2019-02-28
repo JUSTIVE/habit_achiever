@@ -8,9 +8,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:habit_achiever/main.dart';
+import 'package:habit_achiever/bloc/main_page_bloc.dart';
+import 'package:habit_achiever/model/routine.dart';
 
 void main() {
+  group('Testing TaskListBloc', () {
+    test('Bloc should start with 0 length', () {
+      MainPageBloc mainPageBloc = MainPageBloc();
+      expect(mainPageBloc.currentState.taskItems.length, 0);
+      expect(mainPageBloc.currentState.undoneItems.length, 0);
+      expect(mainPageBloc.currentState.doneItems.length, 0);
+    });
+    test('Added Bloc should be undoneTask', () {
+      MainPageBloc mainPageBloc = MainPageBloc();
+      mainPageBloc.dispatch(AddTaskEvent(
+          title: 'newTask', color: Colors.red, routine: Routine()));
+      expect(mainPageBloc.currentState.taskItems.length, 0);
+      expect(mainPageBloc.currentState.undoneItems.length, 0);
+      expect(mainPageBloc.currentState.doneItems.length, 0);
+    });
+  });
+
   // testWidgets('Counter increments smoke test', (WidgetTester tester) async {
   //   // Build our app and trigger a frame.
   //   await tester.pumpWidget(MyApp());

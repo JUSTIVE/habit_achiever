@@ -15,7 +15,7 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
   final List<Color> colorSchemes = [
     Colors.red.shade300,
     Colors.orange.shade300,
-    Colors.yellow.shade300,
+    Colors.yellow.shade400,
     Colors.greenAccent.shade100,
     Colors.lightBlueAccent.shade100,
     Colors.indigoAccent.shade100,
@@ -37,10 +37,7 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
       key: _scaffoldKey,
       body: Stack(children: [
         Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(24), topRight: Radius.circular(24))),
+          color: Colors.white,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
             child: Column(

@@ -68,5 +68,6 @@ class MainPageBloc extends Bloc<TaskEvent, TaskListState> {
                 (item.tasks.last.isDone) &&
                 item.routine.routines[DateTime.now().weekday - 1])
             .toList());
+    
   }
 }

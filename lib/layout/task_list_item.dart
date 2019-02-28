@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../model/task_item.dart';
 
 import '../bloc/main_page_bloc.dart';
+import 'task_info_page.dart';
 
 class TaskListItem extends StatefulWidget {
   TaskListItem({this.taskItem, this.redrawer});
@@ -37,7 +38,12 @@ class _TaskListItemState extends State<TaskListItem> {
                           onClosing: () {},
                         )));
               },
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => TaskInfoPage(
+                          taskItem: widget.taskItem,
+                        )));
+              },
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 8),
                 child: Flex(
@@ -82,13 +88,12 @@ class _TaskListItemState extends State<TaskListItem> {
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: InkWell(
-              onTap: () {
-                _mainPageBloc
-                    .dispatch(TaskItemDoneEvent(id: widget.taskItem.id));
-              },
+          InkWell(
+            onTap: () {
+              _mainPageBloc.dispatch(TaskItemDoneEvent(id: widget.taskItem.id));
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
               child: Icon(Icons.check, color: Colors.grey.shade300),
             ),
           ),
@@ -123,7 +128,7 @@ class _TaskListItemLongPressBottomSheetState
           SizedBox(height: 32),
           InkWell(
             onTap: () {
-              print("삭제");
+              print(widget.id.toString()+"삭제");
               setState(() {
                 BlocProvider.of<MainPageBloc>(context)
                     .dispatch(RemoveTaskEvent(id: widget.id));
