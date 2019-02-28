@@ -19,49 +19,54 @@ class RemoveTaskEvent extends TaskEvent {
   int id;
 }
 
-class TaskListState extends Equatable {
-  final List<TaskItem> taskItems;
-  final List<TaskItem> visibleItems;
-  TaskListState({@required this.taskItems, this.visibleItems})
-      : super([taskItems,visibleItems]);
+class TaskItemDoneEvent extends TaskEvent {
+  TaskItemDoneEvent({@required this.id});
+  int id;
 }
 
-class TaskListUpdated extends TaskListState {
-  final List<TaskItem> visibleItems;
-  TaskListUpdated(List<TaskItem> taskItems, this.visibleItems)
-      : super(taskItems: taskItems);
+class TaskListState extends Equatable {
+  final List<TaskItem> taskItems;
+  final List<TaskItem> undoneItems;
+  final List<TaskItem> doneItems;
+
+  TaskListState({@required this.taskItems, this.undoneItems, this.doneItems})
+      : super([taskItems, undoneItems]);
 }
 
 class MainPageBloc extends Bloc<TaskEvent, TaskListState> {
   @override
   TaskListState get initialState => TaskListState(
-      taskItems: List<TaskItem>(), visibleItems: List<TaskItem>());
+      taskItems: List<TaskItem>(),
+      undoneItems: List<TaskItem>(),
+      doneItems: List<TaskItem>());
 
   @override
   Stream<TaskListState> mapEventToState(
       TaskListState currentState, TaskEvent event) async* {
+    List<TaskItem> temp = currentState.taskItems;
+    ;
     if (event is AddTaskEvent) {
-      List<TaskItem> temp = currentState.taskItems;
       temp.add(TaskItem(
           id: TaskItem.lastId++,
           title: event.title,
           color: event.color,
           routine: event.routine));
-      yield TaskListState(
-          taskItems: temp,
-          visibleItems: temp.where((item) =>
-              (!item.tasks.last.isDone) &&
-              item.routine.routines[DateTime.now().weekday - 1]).toList()
-          );
     } else if (event is RemoveTaskEvent) {
-      List<TaskItem> temp = currentState.taskItems;
       temp.removeWhere((i) => i.id == event.id);
-      yield TaskListState(
-          taskItems: temp,
-          visibleItems: temp.where((item) =>
-              (!item.tasks.last.isDone) &&
-              item.routine.routines[DateTime.now().weekday - 1]).toList()
-          );
+    } else if (event is TaskItemDoneEvent) {
+      temp[event.id].tasks.last.isDone=true;
     }
+    yield TaskListState(
+        taskItems: temp,
+        undoneItems: temp
+            .where((item) =>
+                (!item.tasks.last.isDone) &&
+                item.routine.routines[DateTime.now().weekday - 1])
+            .toList(),
+        doneItems: temp
+            .where((item) =>
+                (item.tasks.last.isDone) &&
+                item.routine.routines[DateTime.now().weekday - 1])
+            .toList());
   }
 }

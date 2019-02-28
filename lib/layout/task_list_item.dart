@@ -3,10 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../model/task_item.dart';
 
 import '../bloc/main_page_bloc.dart';
-import 'component/row_builder.dart';
 
 class TaskListItem extends StatefulWidget {
-  TaskListItem({this.taskItem,this.redrawer});
+  TaskListItem({this.taskItem, this.redrawer});
   final Function redrawer;
   final TaskItem taskItem;
   @override
@@ -17,74 +16,90 @@ class _TaskListItemState extends State<TaskListItem> {
   @override
   Widget build(BuildContext context) {
     MainPageBloc _mainPageBloc = BlocProvider.of<MainPageBloc>(context);
-    return InkWell(
-      splashColor: Colors.grey.shade100,
-      onLongPress: () {
-        showModalBottomSheet(
-            context: context,
-            builder: (context) => BlocProvider(
-                bloc: _mainPageBloc,
-                child: BottomSheet(
-                  builder: (context) =>
-                      TaskListItemLongPressBottomSheet(id: widget.taskItem.id,redrawer:widget.redrawer),
-                  onClosing: () {},
-                )));
-      },
-      onTap: () {},
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8),
-        child: Row(
-          children: <Widget>[
-            SizedBox(
-              width: 16,
-            ),
-            Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                  color: widget.taskItem.color,
-                  borderRadius: BorderRadius.all(Radius.circular(24))),
-            ),
-            SizedBox(
-              width: 16,
-            ),
-            Expanded(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Text(widget.taskItem.title,
-                    style: Theme.of(context).textTheme.body1),
-                SizedBox(
-                  height: 4,
+    return Flex(direction: Axis.vertical, children: <Widget>[
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          Expanded(
+            child: InkWell(
+              splashColor: Colors.grey.shade100,
+              onLongPress: () {
+                showModalBottomSheet(
+                    context: context,
+                    builder: (context) => BlocProvider(
+                        bloc: _mainPageBloc,
+                        child: BottomSheet(
+                          builder: (context) =>
+                              TaskListItemLongPressBottomSheet(
+                                  id: widget.taskItem.id,
+                                  redrawer: widget.redrawer),
+                          onClosing: () {},
+                        )));
+              },
+              onTap: () {},
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: Flex(
+                  direction: Axis.horizontal,
+                  children: <Widget>[
+                    SizedBox(
+                      width: 16,
+                    ),
+                    Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                          color: widget.taskItem.tasks.last.isDone
+                              ? Colors.grey.shade300
+                              : widget.taskItem.color,
+                          borderRadius: BorderRadius.all(Radius.circular(24))),
+                    ),
+                    SizedBox(
+                      width: 16,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Text(widget.taskItem.title,
+                            style: Theme.of(context).textTheme.body1),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: List.generate(7, (int index) {
+                              return RoutineToken(
+                                  color: widget.taskItem.routine.routines[index]
+                                      ? widget.taskItem.color
+                                      : Colors.grey.shade200);
+                            })),
+                      ],
+                    ),
+                  ],
                 ),
-                RowBuilder(
-                  itemCount: 7,
-                  itemBuilder: (BuildContext context, int index) {
-                    return RoutineToken(
-                        color: widget.taskItem.routine.routines[index]
-                            ? widget.taskItem.color
-                            : Colors.grey.shade200);
-                  },
-                )
-              ],
-            )),
-            // Container(
-            //   color: Colors.grey.shade100,
-            //   width: 200,
-            //   height: 36,
-            // ),
-            Icon(Icons.check, color: Colors.grey.shade300),
-            SizedBox(width: 16)
-          ],
-        ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: 16),
+            child: InkWell(
+              onTap: () {
+                _mainPageBloc
+                    .dispatch(TaskItemDoneEvent(id: widget.taskItem.id));
+              },
+              child: Icon(Icons.check, color: Colors.grey.shade300),
+            ),
+          ),
+        ],
       ),
-    );
+    ]);
   }
 }
 
 class TaskListItemLongPressBottomSheet extends StatefulWidget {
-  TaskListItemLongPressBottomSheet({@required this.id,this.redrawer});
+  TaskListItemLongPressBottomSheet({@required this.id, this.redrawer});
   final int id;
   final Function redrawer;
 

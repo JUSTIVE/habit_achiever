@@ -2,9 +2,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:habit_achiever/layout/task_list_item.dart';
 import 'add_page.dart';
-import 'component/column_builder.dart';
-import '../model/task_item.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/main_page_progress_bloc.dart';
 import '../bloc/main_page_bloc.dart';
@@ -76,14 +73,14 @@ class _MainPageState extends State<MainPage> {
                                       ListView.builder(
                                         shrinkWrap: true,
                                         itemCount:
-                                            blocState.data.visibleItems.length,
+                                            blocState.data.undoneItems.length,
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           return BlocProvider(
                                             bloc: _mainPageBloc,
                                             child: TaskListItem(
                                                 taskItem: blocState
-                                                    .data.visibleItems[index],
+                                                    .data.undoneItems[index],
                                                 redrawer: redraw),
                                           );
                                         },
@@ -93,7 +90,7 @@ class _MainPageState extends State<MainPage> {
                                                 .data.taskItems.length
                                                 .toString() +
                                             ", vis:" +
-                                            blocState.data.visibleItems.length
+                                            blocState.data.undoneItems.length
                                                 .toString()),
                                       )
                                     ],
@@ -129,14 +126,14 @@ class _MainPageState extends State<MainPage> {
                                       ListView.builder(
                                         shrinkWrap: true,
                                         itemCount:
-                                            blocState.data.visibleItems.length,
+                                            blocState.data.doneItems.length,
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           return BlocProvider(
                                             bloc: _mainPageBloc,
                                             child: TaskListItem(
                                                 taskItem: blocState
-                                                    .data.visibleItems[index],
+                                                    .data.doneItems[index],
                                                 redrawer: redraw),
                                           );
                                         },
@@ -146,7 +143,7 @@ class _MainPageState extends State<MainPage> {
                                                 .data.taskItems.length
                                                 .toString() +
                                             ", don:" +
-                                            blocState.data.visibleItems.length
+                                            blocState.data.doneItems.length
                                                 .toString()),
                                       )
                                     ],
