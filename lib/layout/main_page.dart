@@ -52,7 +52,7 @@ class _MainPageState extends State<MainPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-                      SizedBox(height: 100),
+                      SizedBox(height: 60),
                       Padding(
                           padding: EdgeInsets.all(12),
                           child: Text('오늘 해야 할 습관')),
@@ -71,6 +71,7 @@ class _MainPageState extends State<MainPage> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       ListView.builder(
+                                        physics: NeverScrollableScrollPhysics(),
                                         shrinkWrap: true,
                                         itemCount:
                                             blocState.data.undoneItems.length,
@@ -108,7 +109,6 @@ class _MainPageState extends State<MainPage> {
                       ),
                       Padding(
                           padding: EdgeInsets.all(12), child: Text('오늘 한 습관')),
-                      //!TODO: implement done works
                       Material(
                         color: Colors.white,
                         elevation: 1,
@@ -125,6 +125,7 @@ class _MainPageState extends State<MainPage> {
                                     children: <Widget>[
                                       ListView.builder(
                                         shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
                                         itemCount:
                                             blocState.data.doneItems.length,
                                         itemBuilder:
@@ -168,45 +169,60 @@ class _MainPageState extends State<MainPage> {
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 48),
-          child: Material(
-            elevation: 12,
-            borderRadius: BorderRadius.all(Radius.circular(8)),
-            color: Colors.white,
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: Column(mainAxisSize: MainAxisSize.min, children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        "진행 상황",
-                        style: Theme.of(context).textTheme.title,
-                        textAlign: TextAlign.start,
-                      ),
-                      Text(
-                        (_mainPageBloc.currentState.taskItems.length == 0
-                                    ? 0
-                                    : (_mainPageProgressBloc.currentState *
-                                        100 /
-                                        _mainPageBloc
-                                            .currentState.taskItems.length))
-                                .toInt()
-                                .toString() +
-                            "%",
-                      )
-                    ],
-                  ),
-                ),
-                LinearProgressIndicator(
-                  value: _mainPageBloc.currentState.taskItems.length == 0
-                      ? 0
-                      : (_mainPageProgressBloc.currentState *
-                          100 /
-                          _mainPageBloc.currentState.taskItems.length),
-                ),
-              ]),
+          child: Container(
+            height: 48,
+            child: Material(
+              elevation: 4,
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+              color: Colors.white,
+              child: Padding(
+                padding: EdgeInsets.all(0),
+                child: BlocBuilder(
+                    bloc: _mainPageBloc,
+                    builder: (context, bloc) {
+                      if (bloc is TaskListState) {
+                        return Stack(
+                          children: <Widget>[
+                            Container(
+                              height: 48,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(4),
+                                child: LinearProgressIndicator(
+                                  value: (bloc.undoneItems.length +
+                                              bloc.doneItems.length ==
+                                          0
+                                      ? 0
+                                      : (bloc.doneItems.length /
+                                          (bloc.undoneItems.length +
+                                              bloc.doneItems.length))),
+                                ),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Padding(
+                                padding: EdgeInsets.only(right:16),
+                                                              child: Text(
+                                    (bloc.undoneItems.length +
+                                                        bloc.doneItems.length ==
+                                                    0
+                                                ? 0
+                                                : (bloc.doneItems.length *
+                                                    100 /
+                                                    (bloc.undoneItems.length +
+                                                        bloc.doneItems.length)))
+                                            .toInt()
+                                            .toString() +
+                                        "%",
+                                    style: TextStyle(
+                                        fontSize: 24, color: Colors.white)),
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                    }),
+              ),
             ),
           ),
         ),
@@ -228,7 +244,7 @@ class _MainPageState extends State<MainPage> {
           tag: "addbutton",
           child: Icon(
             Icons.add,
-            color: Colors.brown,
+            color: Theme.of(context).primaryColor,
           ),
         ),
       ),

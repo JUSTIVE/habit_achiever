@@ -176,7 +176,7 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
                   ),
                   FloatingActionButton(
                     backgroundColor: Colors.white,
-                    child: Hero(tag: "addbutton", child: Icon(Icons.add)),
+                    child: Hero(tag: "addbutton", child: Icon(Icons.add,color: Theme.of(context).primaryColor,)),
                     onPressed: () async {
                       if (tec.text.trim() != "") {
                         widget.mainPageBloc.dispatch(AddTaskEvent(
