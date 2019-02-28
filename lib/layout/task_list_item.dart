@@ -122,37 +122,70 @@ class _TaskListItemLongPressBottomSheetState
           color: Colors.white,
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(16), topRight: Radius.circular(16))),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          SizedBox(height: 32),
-          InkWell(
-            onTap: () {
-              print(widget.id.toString()+"삭제");
-              setState(() {
-                BlocProvider.of<MainPageBloc>(context)
-                    .dispatch(RemoveTaskEvent(id: widget.id));
-                widget.redrawer();
-              });
-              Navigator.pop(context);
-            },
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Icon(
-                  Icons.remove_circle,
-                  color: Colors.redAccent.shade100,
-                ),
-                SizedBox(
-                  width: 8,
-                ),
-                Text('이 습관 삭제하기',
-                    style: TextStyle(color: Colors.redAccent.shade100)),
-              ],
+      child: Padding(
+        padding: EdgeInsets.only(left: 16, top: 32),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            TaskListItemLongPressBottomSheetItem(
+              text: '이 습관 수정하기',
+              color: Colors.grey.shade400,
+              icon: Icons.edit,
+              action: () {
+                print(widget.id.toString() + "편집");
+                //TODO: 편집 화면 설정
+                Navigator.pop(context);
+              },
             ),
-          ),
-          SizedBox(height: 32),
-        ],
+            TaskListItemLongPressBottomSheetItem(
+              text: '이 습관 삭제하기',
+              color: Colors.redAccent.shade100,
+              icon: Icons.remove_circle,
+              action: () {
+                print(widget.id.toString() + "삭제");
+                setState(() {
+                  BlocProvider.of<MainPageBloc>(context)
+                      .dispatch(RemoveTaskEvent(id: widget.id));
+                  widget.redrawer();
+                });
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class TaskListItemLongPressBottomSheetItem extends StatelessWidget {
+  TaskListItemLongPressBottomSheetItem(
+      {this.text, this.action, this.color, this.icon});
+  final Color color;
+  final Function action;
+  final String text;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 24),
+      child: InkWell(
+        onTap: action,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Icon(
+              icon,
+              color: color,
+            ),
+            SizedBox(
+              width: 8,
+            ),
+            Text(text, style: TextStyle(color: color)),
+          ],
+        ),
       ),
     );
   }
