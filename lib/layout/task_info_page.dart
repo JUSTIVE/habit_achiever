@@ -52,14 +52,19 @@ class _TaskInfoPageState extends State<TaskInfoPage>
                 return Row(
                   children: <Widget>[
                     Expanded(
-                                          child: LinearProgressIndicator(
-                        backgroundColor: Colors.grey.shade100,
-                        value: _gaugeAnimation.value * 50 / 100,
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(widget.taskItem.color),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                                              child: LinearProgressIndicator(
+                          backgroundColor: Colors.grey.shade100,
+                          value: _gaugeAnimation.value * 50 / 100,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              widget.taskItem.color),
+                        ),
                       ),
                     ),
-                    SizedBox(width: 16,),
+                    SizedBox(
+                      width: 16,
+                    ),
                     Text((_gaugeAnimation.value * 50).round().toString())
                   ],
                 );

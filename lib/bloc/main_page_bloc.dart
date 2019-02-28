@@ -44,7 +44,7 @@ class MainPageBloc extends Bloc<TaskEvent, TaskListState> {
   Stream<TaskListState> mapEventToState(
       TaskListState currentState, TaskEvent event) async* {
     List<TaskItem> temp = currentState.taskItems;
-    ;
+
     if (event is AddTaskEvent) {
       temp.add(TaskItem(
           id: TaskItem.lastId++,
