@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../model/task_item.dart';
+import '../model/Date.dart';
 import 'package:flutter/scheduler.dart';
 
 class TaskInfoPage extends StatefulWidget {
@@ -37,11 +38,15 @@ class _TaskInfoPageState extends State<TaskInfoPage>
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(height: 32),
             Text(
               widget.taskItem.title,
-              style: Theme.of(context).textTheme.title,
+              style: Theme.of(context)
+                  .textTheme
+                  .title
+                  .merge(TextStyle(fontWeight: FontWeight.w900)),
             ),
             SizedBox(
               height: 32,
@@ -54,7 +59,7 @@ class _TaskInfoPageState extends State<TaskInfoPage>
                     Expanded(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(16),
-                                              child: LinearProgressIndicator(
+                        child: LinearProgressIndicator(
                           backgroundColor: Colors.grey.shade100,
                           value: _gaugeAnimation.value * 50 / 100,
                           valueColor: AlwaysStoppedAnimation<Color>(
@@ -69,10 +74,49 @@ class _TaskInfoPageState extends State<TaskInfoPage>
                   ],
                 );
               },
+            ),
+            AnimatedBuilder(
+              animation: _gaugeAnimation,
+              builder: (BuildContext context, Widget child) {
+                return GridDotCalendar(
+                  animationValue: _gaugeAnimation.value,
+                );
+              },
             )
           ],
         ),
       )
     ]));
+  }
+}
+
+class GridDotCalendar extends StatefulWidget {
+  GridDotCalendar({this.animationValue});
+  final double animationValue;
+  @override
+  State<StatefulWidget> createState() => GridDotCalendarState();
+}
+
+class GridDotCalendarState extends State<GridDotCalendar> {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+
+    );
+  }
+}
+
+class GridDotWeekItem extends StatefulWidget {
+  Date startDate;
+  @override
+  _GridDotWeekItemState createState() => _GridDotWeekItemState();
+}
+
+class _GridDotWeekItemState extends State<GridDotWeekItem> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      
+    );
   }
 }
