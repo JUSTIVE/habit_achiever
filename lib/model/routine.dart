@@ -1,7 +1,6 @@
 enum RoutineEnum{Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday}
 
 class Routine{
-  List<bool> _routines; 
   Routine(){
     this._routines =List<bool>();
     
@@ -9,6 +8,28 @@ class Routine{
       routines.add(true);
     }
   }
+
+  List<bool> _routines; 
+  Routine.fromJson(Map<String,dynamic> json)
+  :_routines=List<bool>()
+  ..add(json['mon'])
+  ..add(json['tue'])
+  ..add(json['wed'])
+  ..add(json['thu'])
+  ..add(json['fri'])
+  ..add(json['sat'])
+  ..add(json['sun']);
+
+  Map<String, dynamic> toJson()=>{
+    'mon':_routines[0],
+    'tue':_routines[1],
+    'wed':_routines[2],
+    'thu':_routines[3],
+    'fri':_routines[4],
+    'sat':_routines[5],
+    'sun':_routines[6],
+  };
+
 
   int setValue(int index){
     _routines[index]=!_routines[index];

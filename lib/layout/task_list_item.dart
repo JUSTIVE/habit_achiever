@@ -33,8 +33,10 @@ class _TaskListItemState extends State<TaskListItem> {
                         child: BottomSheet(
                           builder: (context) =>
                               TaskListItemLongPressBottomSheet(
-                                  id: widget.taskItem.id,
-                                  redrawer: widget.redrawer),
+                                id: widget.taskItem.id,
+                                redrawer: widget.redrawer,
+                                taskName: widget.taskItem.title,
+                              ),
                           onClosing: () {},
                         )));
               },
@@ -92,9 +94,12 @@ class _TaskListItemState extends State<TaskListItem> {
             onTap: () {
               _mainPageBloc.dispatch(TaskItemDoneEvent(id: widget.taskItem.id));
             },
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Icon(Icons.check, color: Colors.grey.shade300),
+            child: Container(
+              height: 52,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Icon(Icons.check, color: Colors.grey.shade300),
+              ),
             ),
           ),
         ],
@@ -104,10 +109,11 @@ class _TaskListItemState extends State<TaskListItem> {
 }
 
 class TaskListItemLongPressBottomSheet extends StatefulWidget {
-  TaskListItemLongPressBottomSheet({@required this.id, this.redrawer});
+  TaskListItemLongPressBottomSheet(
+      {@required this.id, this.redrawer, this.taskName});
   final int id;
   final Function redrawer;
-
+  final String taskName;
   @override
   _TaskListItemLongPressBottomSheetState createState() =>
       _TaskListItemLongPressBottomSheetState();
@@ -123,13 +129,13 @@ class _TaskListItemLongPressBottomSheetState
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(16), topRight: Radius.circular(16))),
       child: Padding(
-        padding: EdgeInsets.only(left: 16, top: 32),
+        padding: EdgeInsets.symmetric(vertical: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             TaskListItemLongPressBottomSheetItem(
-              text: '이 습관 수정하기',
+              text: '${widget.taskName} 수정하기',
               color: Colors.grey.shade400,
               icon: Icons.edit,
               action: () {
@@ -139,7 +145,7 @@ class _TaskListItemLongPressBottomSheetState
               },
             ),
             TaskListItemLongPressBottomSheetItem(
-              text: '이 습관 삭제하기',
+              text: '${widget.taskName} 삭제하기',
               color: Colors.redAccent.shade100,
               icon: Icons.remove_circle,
               action: () {
@@ -169,22 +175,26 @@ class TaskListItemLongPressBottomSheetItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 24),
+    return Material(
       child: InkWell(
-        onTap: action,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Icon(
-              icon,
-              color: color,
-            ),
-            SizedBox(
-              width: 8,
-            ),
-            Text(text, style: TextStyle(color: color)),
-          ],
+        onTap: () {
+          action();
+        },
+        child: Padding(
+          padding: EdgeInsets.only(left: 16, bottom: 12, top: 12),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Icon(
+                icon,
+                color: color,
+              ),
+              SizedBox(
+                width: 8,
+              ),
+              Text(text, style: TextStyle(color: color)),
+            ],
+          ),
         ),
       ),
     );

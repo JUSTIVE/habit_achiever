@@ -1,6 +1,7 @@
 import '../bloc/main_page_bloc.dart';
 import 'package:flutter/material.dart';
 import '../model/routine.dart';
+import 'dart:convert';
 
 class MainPageBottomSheet extends StatefulWidget {
   MainPageBottomSheet({this.mainPageBloc});
@@ -185,6 +186,8 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
                             routine: currentRoutine));
                         FocusScope.of(context).requestFocus(new FocusNode());
                         Navigator.pop(context);
+                        print(jsonEncode(widget.mainPageBloc.currentState.taskItems.last));
+
                       } else {
                         (_scaffoldKey.currentState as ScaffoldState)
                             .showSnackBar(SnackBar(
