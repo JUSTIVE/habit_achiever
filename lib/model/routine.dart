@@ -10,8 +10,8 @@ class Routine{
   }
 
   List<bool> _routines; 
-  Routine.fromJson(String json)
-  :_routines=json.;
+  Routine.fromJson(List<dynamic> json)
+  :_routines=json.map((x)=>(x as bool)).toList();
   
 
   List<bool> toJson()=>routines;

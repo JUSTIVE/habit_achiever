@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'task_list_item.dart';
@@ -237,14 +239,14 @@ class _MainPageState extends State<MainPage> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.white,
         onPressed: () {
-          Routine routineDummy = Routine.fromJson("[true,true,true,true,true,true,true]");
-          print()
+          // Routine routineDummy = Routine.fromJson(jsonDecode(""));
+          
 
           TaskItem dummy =TaskItem.fromJson({
         "id": 816,
         "title": "되면좋겠다",
         "color": "Color(0xffe57373)",
-        "routine": "{\"mon\":true,\"tue\":true,\"wed\":true,\"thu\":true,\"fri\":true,\"sat\":true,\"sun\":true}",
+        "routine": "[true,true,true,true,true,true,true]",
         "tasks": "[{\"date\":\"[2019-03-04 02:52:17.502853]\",\"isDone\":false}]"
     });
           String result = dummy!=null?"됨!":"안됨!";

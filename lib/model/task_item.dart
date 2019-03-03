@@ -19,7 +19,7 @@ class TaskItem {
     color=Color(int.parse((json['color'] as String).substring(8,16),radix: 16)),
     title=json['title'],
     // tasks=List. json['tasks'],
-    routine= Routine.fromJson(json['routine']);
+    routine= Routine.fromJson(jsonDecode( json['routine']));
   
   Map<String, dynamic> toJson()=>
   {
