@@ -11,7 +11,6 @@ import 'dart:ui';
 import '../model/task_item.dart';
 import '../model/routine.dart';
 
-
 class MainPage extends StatefulWidget {
   MainPage({Key key}) : super(key: key);
   @override
@@ -239,17 +238,15 @@ class _MainPageState extends State<MainPage> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.white,
         onPressed: () {
-          // Routine routineDummy = Routine.fromJson(jsonDecode(""));
-          
-
-          TaskItem dummy =TaskItem.fromJson({
-        "id": 816,
-        "title": "되면좋겠다",
-        "color": "Color(0xffe57373)",
-        "routine": "[true,true,true,true,true,true,true]",
-        "tasks": "[{\"date\":\"[2019-03-04 02:52:17.502853]\",\"isDone\":false}]"
-    });
-          String result = dummy!=null?"됨!":"안됨!";
+          TaskItem dummy = TaskItem.fromJson({
+            "id": 0,
+            "title": "되나",
+            "color": "Color(0xffe57373)",
+            "routine": "[true,true,true,true,true,true,true]",
+            "tasks":
+                "[{\"date\":\"{\\\"year\\\":2019,\\\"month\\\":3,\\\"day\\\":4}\",\"isDone\":false}]"
+          });
+          String result = dummy != null ? "됨!" : "안됨!";
           print(result);
 
           Navigator.push(

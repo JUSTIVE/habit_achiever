@@ -9,11 +9,11 @@ class Task{
   bool isDone;
 
   Task.fromJson(Map<String,dynamic> json)
-  :date = json['date'],
+  :date = Date.fromJson(jsonDecode(json['date'])),
   isDone = json['isDone'];
 
   Map<String, dynamic> toJson()=>{
-    'date':date.toString(),
+    'date': jsonEncode(date),
     'isDone':isDone
   };
 }

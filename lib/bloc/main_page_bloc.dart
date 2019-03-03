@@ -71,7 +71,7 @@ class MainPageBloc extends Bloc<TaskEvent, TaskListState> {
                 (item.tasks.last.isDone) &&
                 item.routine.routines[DateTime.now().weekday - 1])
             .toList());
-    await SharedPreferenceAccesser.setTaskLists(jsonEncode(value.taskItems));
+    // await SharedPreferenceAccesser.setTaskLists(jsonEncode(value.taskItems));
     yield value;
   }
 }
