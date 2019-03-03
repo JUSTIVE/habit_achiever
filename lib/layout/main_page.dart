@@ -4,8 +4,11 @@ import 'task_list_item.dart';
 import 'add_page.dart';
 import '../bloc/main_page_progress_bloc.dart';
 import '../bloc/main_page_bloc.dart';
-import '../model/task_item.dart';
 import 'dart:ui';
+
+import '../model/task_item.dart';
+import '../model/routine.dart';
+
 
 class MainPage extends StatefulWidget {
   MainPage({Key key}) : super(key: key);
@@ -234,6 +237,9 @@ class _MainPageState extends State<MainPage> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.white,
         onPressed: () {
+          Routine routineDummy = Routine.fromJson("[true,true,true,true,true,true,true]");
+          print()
+
           TaskItem dummy =TaskItem.fromJson({
         "id": 816,
         "title": "되면좋겠다",
@@ -241,7 +247,7 @@ class _MainPageState extends State<MainPage> {
         "routine": "{\"mon\":true,\"tue\":true,\"wed\":true,\"thu\":true,\"fri\":true,\"sat\":true,\"sun\":true}",
         "tasks": "[{\"date\":\"[2019-03-04 02:52:17.502853]\",\"isDone\":false}]"
     });
-      String result = dummy!=null?"됨!":"안됨!";
+          String result = dummy!=null?"됨!":"안됨!";
           print(result);
 
           Navigator.push(

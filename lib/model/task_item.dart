@@ -18,8 +18,8 @@ class TaskItem {
     :id=json['id'],
     color=Color(int.parse((json['color'] as String).substring(8,16),radix: 16)),
     title=json['title'],
-    tasks=json['tasks'],
-    routine= json['routine'];
+    // tasks=List. json['tasks'],
+    routine= Routine.fromJson(json['routine']);
   
   Map<String, dynamic> toJson()=>
   {
