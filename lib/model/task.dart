@@ -13,7 +13,7 @@ class Task{
   isDone = json['isDone'];
 
   Map<String, dynamic> toJson()=>{
-    'date':date,
+    'date':date.toString(),
     'isDone':isDone
   };
 }

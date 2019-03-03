@@ -186,7 +186,7 @@ class _MainPageBottomSheetState extends State<MainPageBottomSheet> {
                             routine: currentRoutine));
                         FocusScope.of(context).requestFocus(new FocusNode());
                         Navigator.pop(context);
-                        print(jsonEncode(widget.mainPageBloc.currentState.taskItems.last));
+                        print(jsonEncode(widget.mainPageBloc.currentState.taskItems));
 
                       } else {
                         (_scaffoldKey.currentState as ScaffoldState)

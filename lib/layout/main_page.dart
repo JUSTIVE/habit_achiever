@@ -201,8 +201,8 @@ class _MainPageState extends State<MainPage> {
                             Align(
                               alignment: Alignment.centerRight,
                               child: Padding(
-                                padding: EdgeInsets.only(right:16),
-                                                              child: Text(
+                                padding: EdgeInsets.only(right: 16),
+                                child: Text(
                                     (bloc.undoneItems.length +
                                                         bloc.doneItems.length ==
                                                     0

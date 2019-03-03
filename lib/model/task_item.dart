@@ -27,7 +27,7 @@ class TaskItem {
     'title':title,
     'color':color.toString(),
     'routine':jsonEncode(routine),
-    'tasks':tasks.map((i)=>jsonEncode(i)).toList()
+    'tasks':tasks.map((i)=>jsonEncode(i)).toList().toString()
   };
   
   static int lastId = 0;
