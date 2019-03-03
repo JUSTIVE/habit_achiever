@@ -16,7 +16,7 @@ class TaskItem {
 
   TaskItem.fromJson(Map<String,dynamic> json)
     :id=json['id'],
-    color=json['color'],
+    color=Color(int.parse((json['color'] as String).substring(8,16),radix: 16)),
     title=json['title'],
     tasks=json['tasks'],
     routine= json['routine'];
@@ -25,7 +25,7 @@ class TaskItem {
   {
     'id':id,
     'title':title,
-    'color':color.toString(),
+    'color':color.value,
     'routine':jsonEncode(routine),
     'tasks':tasks.map((i)=>jsonEncode(i)).toList().toString()
   };

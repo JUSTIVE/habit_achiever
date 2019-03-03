@@ -1,10 +1,11 @@
-import 'dart:ui';
-import 'package:flutter/material.dart';
-import 'package:habit_achiever/layout/task_list_item.dart';
-import 'add_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/material.dart';
+import 'task_list_item.dart';
+import 'add_page.dart';
 import '../bloc/main_page_progress_bloc.dart';
 import '../bloc/main_page_bloc.dart';
+import '../model/task_item.dart';
+import 'dart:ui';
 
 class MainPage extends StatefulWidget {
   MainPage({Key key}) : super(key: key);
@@ -233,6 +234,16 @@ class _MainPageState extends State<MainPage> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.white,
         onPressed: () {
+          TaskItem dummy =TaskItem.fromJson({
+        "id": 816,
+        "title": "되면좋겠다",
+        "color": "Color(0xffe57373)",
+        "routine": "{\"mon\":true,\"tue\":true,\"wed\":true,\"thu\":true,\"fri\":true,\"sat\":true,\"sun\":true}",
+        "tasks": "[{\"date\":\"[2019-03-04 02:52:17.502853]\",\"isDone\":false}]"
+    });
+      String result = dummy!=null?"됨!":"안됨!";
+          print(result);
+
           Navigator.push(
               context,
               MaterialPageRoute(
